@@ -8,10 +8,6 @@
 // manage path
 // error handling
 
-int shell_builts(char** args, char** env, char* initial_directory) {
-
-}
-
 
 void shell_loop(char** env)
 {
@@ -34,16 +30,18 @@ void shell_loop(char** env)
 
         args = parse_input(input);
 
-        for(size_t i = 0; args[i] != NULL; i++) {
-            printf("Args: %s", args[i]);
-            printf("\n");
-        }
-
-        // if(args[0] != NULL) {
-        //     shell_builts(args, env, initial_directory);
+        // for(size_t i = 0; args[i] != NULL; i++) {
+        //     printf("Args: %s", args[i]);
+        //     printf("\n");
         // }
-        free_tokens(args);
+
+        if(args[0] != NULL) {
+            shell_builts(args, env, initial_directory);
+        }
+        
     }
+
+    free_tokens(args);
 
     
 }
