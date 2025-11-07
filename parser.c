@@ -22,7 +22,7 @@ char** parse_input(char* input)
             i++;
         }
 
-        tokens[position] = malloc((token_length + 1) * sizeof(char*));
+        tokens[position] = malloc((token_length + 1) * sizeof(char));
         if(!tokens[position]) {
             perror("Malloc failed");
             exit(EXIT_FAILURE);
@@ -41,4 +41,16 @@ char** parse_input(char* input)
     tokens[position] = NULL; // terminating array with null
 
     return tokens;
+}
+
+
+// free allocated tokens memory
+void free_tokens(char** tokens) {
+    if(tokens) return;
+
+    for(size_t i = 0; tokens[i]; i++) {
+        free(tokens[i]); // each token
+    }
+
+    free(tokens); // array
 }

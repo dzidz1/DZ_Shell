@@ -8,6 +8,10 @@
 // manage path
 // error handling
 
+int shell_builts(char** args, char** env, char* initial_directory) {
+
+}
+
 
 void shell_loop(char** env)
 {
@@ -15,6 +19,8 @@ void shell_loop(char** env)
     size_t input_size = 0;
 
     char** args;
+
+    char* initial_directory = getcwd(NULL, 0); // get current working directory
 
     while(1) {
         printf("<dz_shell> ");
@@ -32,7 +38,14 @@ void shell_loop(char** env)
             printf("Args: %s", args[i]);
             printf("\n");
         }
+
+        // if(args[0] != NULL) {
+        //     shell_builts(args, env, initial_directory);
+        // }
+        free_tokens(args);
     }
+
+    
 }
 
 
