@@ -36,7 +36,7 @@ char** parse_input(char* input)
             exit(EXIT_FAILURE);
         } 
 
-        // copying token in array
+        // copying token at address tokens[position]
         for(size_t j = 0; j < token_length; j++) {
             tokens[position][j] = token[j];
         }

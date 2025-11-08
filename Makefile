@@ -1,5 +1,5 @@
 TARGET = dz_shell
-OBJ = main.c parser.c my_helpers.c
+OBJ = main.c parser.c my_helpers.c builtins.c
 CFLAGS = -Wall -Wextra -Werror
 CC = gcc
 
