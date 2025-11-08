@@ -2,7 +2,8 @@
 
 
 // cd, cd [path], cd - (prev dir), cd ~, cd .., handling non existing dirs and permission issues
-int command_cd(char** args, char* initial_directory) {
+int command_cd(char** args, char* initial_directory) 
+{
     (void) initial_directory; // not needed yet
     if(args[1] == NULL) {
         printf("cd expects path as an argument\n");
@@ -15,7 +16,19 @@ int command_cd(char** args, char* initial_directory) {
 }
 
 
-int command_pwd();
+int command_pwd() 
+{
+    char* cwd = getcwd(NULL, 0);
+
+    if(cwd == NULL) {
+        perror("PWD failed");
+    } else {
+        printf("%s\n", cwd);
+    }
+    free(cwd);
+    
+    return 0;
+}
 int command_echo(char** args, char** env);
 int command_env(char** env);
 int command_which(char** args, char** env);

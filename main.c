@@ -16,7 +16,7 @@ int shell_builts(char** args, char** env, char* initial_directory)
     if(my_strcmp(args[0], "cd") == 0) {
         return command_cd(args, initial_directory);
     } else if(my_strcmp(args[0], "pwd") == 0) {
-        // command_pwd();
+        return command_pwd();
     } else if(my_strcmp(args[0], "echo") == 0) {
         // command_echo(args, env);
     } else if(my_strcmp( args[0], "env") == 0) {
