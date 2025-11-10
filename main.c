@@ -19,9 +19,9 @@ int shell_builts(char** args, char** env, char* initial_directory)
     } else if(my_strcmp(args[0], "echo") == 0) {
         return command_echo(args, env);
     } else if(my_strcmp( args[0], "env") == 0) {
-        // command_env(env);
+        return command_env(env);
     } else if(my_strcmp(args[0], "which") == 0) {
-        // command_which(args, env);
+        return command_which(args, env);
     } else if(my_strcmp(args[0], "exit") == 0) {
         exit(EXIT_SUCCESS);
     } else {
@@ -36,7 +36,7 @@ void shell_loop(char** env)
     char* input = NULL;
     size_t input_size = 0;
 
-    char** args;
+    char** args; // input arguments array
 
     char* initial_directory = getcwd(NULL, 0); // get current working directory
 
