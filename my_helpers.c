@@ -45,7 +45,7 @@ int my_strncmp(const char *str1, const char *str2, size_t n) {
   if (i == n)
     return 0;
 
-  return (unsigned char)str1[i] - (unsigned char)str2[i];
+  return (unsigned char)*str1 - (unsigned char)*str2;
 }
 
 char *my_getenv(char *variable_name, char **env) {
