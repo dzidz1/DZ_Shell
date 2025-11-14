@@ -7,6 +7,7 @@
 
 #define MAX_INPUT 1024
 
+// parsing
 char **parse_input(char *input);
 void free_tokens(char **tokens);
 
