@@ -65,16 +65,6 @@ char *my_getenv(char *variable_name, char **env) {
   return NULL;
 }
 
-char *my_strdup(const char *str) {
-  if (!str)
-    return NULL;
-  size_t len = my_strlen(str);
-  char *copy = malloc((len + 1) * sizeof(char));
-  if (!copy)
-    return NULL;
-  return my_strcpy(copy, str);
-}
-
 char *my_strcpy(char *dest, const char *src) {
   if (!src)
     return NULL;
@@ -86,6 +76,16 @@ char *my_strcpy(char *dest, const char *src) {
   }
   *dest = '\0';
   return return_pointer;
+}
+
+char *my_strdup(const char *str) {
+  if (!str)
+    return NULL;
+  size_t len = my_strlen(str);
+  char *copy = malloc((len + 1) * sizeof(char));
+  if (!copy)
+    return NULL;
+  return my_strcpy(copy, str);
 }
 
 char *my_strchr(const char *str, char c) {
