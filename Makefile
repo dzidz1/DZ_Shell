@@ -1,11 +1,13 @@
 TARGET = dz_shell
 TEST_TARGET = test_helpers
+TEST_PARSER = test_parser
 SRC_DIR = src
 INC_DIR = include
 TEST_DIR = tests
 
 OBJ = $(SRC_DIR)/main.c $(SRC_DIR)/parser.c $(SRC_DIR)/my_helpers.c $(SRC_DIR)/builtins.c
 TEST_OBJ = $(TEST_DIR)/test_my_helpers.c $(SRC_DIR)/my_helpers.c
+TEST_PARSER_OBJ = $(TEST_DIR)/test_parser.c $(SRC_DIR)/parser.c $(SRC_DIR)/my_helpers.c
 
 CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 CC = gcc
@@ -15,18 +17,28 @@ all: $(TARGET)
 $(TARGET):
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
 
-test: $(TEST_TARGET)
-	./$(TEST_TARGET)
+test: $(TEST_TARGET) $(TEST_PARSER)
+	./$(TEST_TARGET) ./$(TEST_PARSER)
 
 $(TEST_TARGET):
 	$(CC) $(CFLAGS) -o $(TEST_TARGET) $(TEST_OBJ)
+
+$(TEST_PARSER):
+	$(CC) $(CFLAGS) -o $(TEST_PARSER) $(TEST_PARSER_OBJ)
+
+
+test_parser_only: $(TEST_PARSER)
+	./$(TEST_PARSER)
+
+test_helpers_only: $(TEST_TARGET)
+	./$(TEST_TARGET)
 
 clean:
 	rm -f *.o
 	
 fclean: clean
-	rm -f $(TARGET) $(TEST_TARGET)
+	rm -f $(TARGET) $(TEST_TARGET) $(TEST_PARSER)
 	
 re: fclean all
 
-.PHONY: all test clean fclean re
+.PHONY: all test test_parser_only test_helpers_only clean fclean re
