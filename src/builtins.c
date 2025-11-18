@@ -9,7 +9,7 @@ int command_cd(char **args, char *initial_directory) {
   if (args[1] == NULL) {
     printf("cd expects path as an argument\n");
   } else if (chdir(args[1]) == 0) {
-    printf("CD worked\n");
+    // worked
   } else {
     perror("CD failed");
   }
@@ -144,5 +144,91 @@ int command_which(char **args, char **env) {
   return 1;
 }
 
-char **command_setenv(char **args, char **env);
-char **command_unsetenv(char **args, char **env);
+int count_env_vars(char **env) {
+  int res = 0;
+  while (env[res]) {
+    res++;
+  }
+  return res;
+}
+
+char **command_setenv(char **args, char **env) {
+  if (args[1] == NULL) {
+    printf("setenv gets const char *name and const char *value\nUsage: setenv "
+           "VAR=value\n");
+    return env;
+  }
+
+  // validating '='
+  char *equal_sign = my_strchr(args[1], '=');
+  if (equal_sign == NULL || equal_sign == args[1]) {
+    printf("Error: invalid format. Use VAR=value\n");
+    return env;
+  }
+
+  // extracting variable name
+  char var_name[256];
+  my_strncpy(var_name, args[1], equal_sign - args[1]);
+  var_name[equal_sign - args[1]] = '\0';
+
+  int env_count = count_env_vars(env);
+  char **new_env = malloc((env_count + 2) * sizeof(char *));
+  if (new_env == NULL) {
+    perror("malloc failed");
+    return env;
+  }
+
+  int found = 0;
+  int new_index = 0;
+
+  for (int i = 0; i < env_count; i++) {
+    // determine if we should set on this index
+    char *existing_equal = my_strchr(env[i], '=');
+    if (existing_equal != NULL) {
+      size_t name_len = existing_equal - env[i];
+      if (my_strncmp(env[i], var_name, name_len) == 0 &&
+          var_name[name_len] == '\0') {
+        // replace existing variable with new value
+        new_env[new_index] = my_strdup(args[1]);
+        found = 1;
+      } else {
+        // copy other vars
+        new_env[new_index] = my_strdup(env[i]);
+      }
+    } else {
+      new_env[new_index] = my_strdup(env[i]);
+    }
+
+    if (new_env[new_index] == NULL) {
+      perror("strdup failed");
+      for (int j = 0; j < new_index; j++) {
+        free(new_env[j]);
+      }
+      free(new_env);
+      return env;
+    }
+
+    new_index++;
+  }
+
+  if (!found) {
+    new_env[new_index] = my_strdup(args[1]);
+    if (new_env[new_index] == NULL) {
+      perror("strdup failed");
+      for (int j = 0; j < new_index; j++) {
+        free(new_env[j]);
+      }
+      free(new_env);
+      return env;
+    }
+    new_index++;
+  }
+
+  new_env[new_index] = NULL;
+  return new_env;
+}
+char **command_unsetenv(char **args, char **env) {
+  (void)args;
+  (void)env;
+  return NULL;
+}
