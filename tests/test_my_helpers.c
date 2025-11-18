@@ -270,6 +270,76 @@ int test_my_strcpy() {
   return (passed == total) ? 1 : 0;
 }
 
+int test_my_strncpy() {
+  int total = 0;
+  int passed = 0;
+  char dest[20];
+
+  // Test 1: normal copy with exact length
+  total++;
+  char *result = my_strncpy(dest, "hello", 5);
+  dest[5] = '\0';
+  if (result == dest && my_strcmp(dest, "hello") == 0) {
+    printf("Test 1 passed: normal copy\n");
+    passed++;
+  } else {
+    printf("Test 1 FAILED: normal copy\n");
+  }
+
+  // Test 2: n larger than source (padding with null bytes)
+  total++;
+  for (int i = 0; i < (int)sizeof(dest); i++)
+    dest[i] = '\0';
+  result = my_strncpy(dest, "hi", 5);
+  if (result == dest && dest[0] == 'h' && dest[1] == 'i' && dest[2] == '\0' &&
+      dest[3] == '\0' && dest[4] == '\0') {
+    printf("Test 2 passed: padding with null bytes\n");
+    passed++;
+  } else {
+    printf("Test 2 FAILED: padding with null bytes\n");
+  }
+
+  // Test 3: n smaller
+  total++;
+  for (int i = 0; i < (int)sizeof(dest); i++)
+    dest[i] = '\0';
+  result = my_strncpy(dest, "world", 3);
+  dest[3] = '\0';
+  if (result == dest && my_strcmp(dest, "wor") == 0) {
+    printf("Test 3 passed: partial copy\n");
+    passed++;
+  } else {
+    printf("Test 3 FAILED: partial copy\n");
+  }
+
+  // Test 4: NULL source
+  total++;
+  for (int i = 0; i < (int)sizeof(dest); i++)
+    dest[i] = '\0';
+  result = my_strncpy(dest, NULL, 5);
+  if (result == NULL) {
+    printf("Test 4 passed: NULL source\n");
+    passed++;
+  } else {
+    printf("Test 4 FAILED: NULL source\n");
+  }
+
+  // Test 5: empty string with padding
+  total++;
+  for (int i = 0; i < (int)sizeof(dest); i++)
+    dest[i] = '\0';
+  result = my_strncpy(dest, "", 3);
+  if (result == dest && dest[0] == '\0' && dest[1] == '\0' && dest[2] == '\0') {
+    printf("Test 5 passed: empty string\n");
+    passed++;
+  } else {
+    printf("Test 5 FAILED: empty string\n");
+  }
+
+  printf("\nmy_strncpy: %d/%d tests passed\n", passed, total);
+  return (passed == total) ? 1 : 0;
+}
+
 int test_my_strdup() {
   int total = 0;
   int passed = 0;
@@ -475,6 +545,10 @@ int main() {
 
   total++;
   passed += test_my_strcpy();
+  printf("\n=========================\n");
+
+  total++;
+  passed += test_my_strncpy();
   printf("\n=========================\n");
 
   total++;
