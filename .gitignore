@@ -1,4 +1,5 @@
 /dz_shell
 /test_helpers
 /test_parser
+/test_builtins
 *.o
