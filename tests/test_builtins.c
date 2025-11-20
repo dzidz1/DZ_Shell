@@ -405,6 +405,61 @@ int test_command_setenv() {
   return (passed == total) ? 1 : 0;
 }
 
+int test_command_unsetenv() {
+  int total = 0;
+  int passed = 0;
+
+  // Test 1: variable is NULL
+  total++;
+  {
+    char *args[] = {"unsetenv", NULL, NULL};
+    char *env[] = {"x=5", "y=10", "z=15", NULL};
+    char **res = command_unsetenv(args, env);
+    if (res == env) {
+      printf("Test 1 passed: variable is NULL\n");
+      passed++;
+    } else {
+      printf(
+          "Test 1 FAILED: variable is NULL, res expected to be same as env\n");
+    }
+  }
+
+  // Test 2: variable exists
+  total++;
+  {
+    char *args[] = {"unsetenv", "y", NULL};
+    char *env[] = {"x=5", "y=10", "z=15", NULL};
+    char **res = command_unsetenv(args, env);
+    if (my_strcmp(res[0], "x=5") == 0 && my_strcmp(res[1], "z=15") == 0 &&
+        res[2] == NULL) {
+      printf("Test 2 passed: existing variable removed\n");
+      passed++;
+      free(res);
+    } else {
+      printf("Test 2 FAILED: existing variable expected to be deleted\n");
+    }
+  }
+
+  // Test 3: variable doesn't exist
+  total++;
+  {
+    char *args[] = {"unsetenv", "k", NULL};
+    char *env[] = {"x=5", "y=10", "z=15", NULL};
+    char **res = command_unsetenv(args, env);
+    if (my_strcmp(res[0], "x=5") == 0 && my_strcmp(res[1], "y=10") == 0 &&
+        my_strcmp(res[2], "z=15") == 0 && res[3] == NULL) {
+      printf("Test 3 passed: variable doesn't exist\n");
+      passed++;
+    } else {
+      printf("Test 3 FAILED: variable doesn't exist, shouldn't be removed "
+             "existing variables\n");
+    }
+  }
+
+  printf("\ncommand_unsetenv: %d/%d tests passed\n", passed, total);
+  return (passed == total) ? 1 : 0;
+}
+
 int main(int argc, char **argv, char **env) {
   (void)argc;
   (void)argv;
@@ -434,6 +489,10 @@ int main(int argc, char **argv, char **env) {
 
   total++;
   passed += test_command_setenv();
+  printf("\n=========================\n");
+
+  total++;
+  passed += test_command_unsetenv();
   printf("\n=========================\n");
 
   printf("Overall Builtins: %d/%d test functions passed\n", passed, total);
