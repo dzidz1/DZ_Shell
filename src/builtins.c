@@ -231,8 +231,40 @@ char **command_setenv(char **args, char **env) {
   new_env[new_index] = NULL;
   return new_env;
 }
+
 char **command_unsetenv(char **args, char **env) {
-  (void)args;
-  (void)env;
-  return NULL;
+  if (args[1] == NULL) {
+    printf("unsetenv gets variable name as an argument\nUsage: unsetenv VAR\n");
+    return env;
+  }
+
+  int vars_count = count_env_vars(env);
+
+  char **new_env = malloc(vars_count * sizeof(char *));
+  if (new_env == NULL) {
+    perror("malloc failed");
+    return env;
+  }
+
+  int j = 0;
+  int found = 0;
+  int len = my_strlen(args[1]);
+  for (int i = 0; i < vars_count; i++) {
+    if (found == 0 && my_strncmp(args[1], env[i], len) == 0 &&
+        env[i][len] == '=') {
+      found = 1;
+    } else {
+      new_env[j] = env[i];
+      j++;
+    }
+  }
+
+  if (found == 0) {
+    printf("variable %s not found in env\n", args[1]);
+    free(new_env);
+    return env;
+  }
+
+  new_env[j] = NULL;
+  return new_env;
 }
