@@ -50,4 +50,4 @@ MIT License - see [LICENSE](LICENSE)
 
 ---
 
-Built by Akaki
+Built by Akaki Dzidziguri (dzidz1)
