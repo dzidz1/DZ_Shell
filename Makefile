@@ -2,6 +2,7 @@ TARGET = dz_shell
 TEST_TARGET = test_helpers
 TEST_PARSER = test_parser
 TEST_BUILTINS = test_builtins
+TEST_EXECUTOR = test_executor
 SRC_DIR = src
 INC_DIR = include
 TEST_DIR = tests
@@ -10,6 +11,7 @@ OBJ = $(SRC_DIR)/main.c $(SRC_DIR)/parser.c $(SRC_DIR)/my_helpers.c $(SRC_DIR)/b
 TEST_OBJ = $(TEST_DIR)/test_my_helpers.c $(SRC_DIR)/my_helpers.c
 TEST_PARSER_OBJ = $(TEST_DIR)/test_parser.c $(SRC_DIR)/parser.c $(SRC_DIR)/my_helpers.c
 TEST_BUILTINS_OBJ = $(TEST_DIR)/test_builtins.c $(SRC_DIR)/builtins.c $(SRC_DIR)/my_helpers.c
+TEST_EXECUTOR_OBJ = $(TEST_DIR)/test_executor.c $(SRC_DIR)/executor.c $(SRC_DIR)/my_helpers.c
 
 CFLAGS = -Wall -Wextra -Werror -I$(INC_DIR)
 CC = gcc
@@ -19,10 +21,11 @@ all: $(TARGET)
 $(TARGET):
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ)
 
-test: $(TEST_TARGET) $(TEST_PARSER) $(TEST_BUILTINS)
+test: $(TEST_TARGET) $(TEST_PARSER) $(TEST_BUILTINS) $(TEST_EXECUTOR)
 	./$(TEST_TARGET)
 	./$(TEST_PARSER)
 	./$(TEST_BUILTINS)
+	./$(TEST_EXECUTOR)
 
 $(TEST_TARGET):
 	$(CC) $(CFLAGS) -o $(TEST_TARGET) $(TEST_OBJ)
@@ -33,6 +36,9 @@ $(TEST_PARSER):
 $(TEST_BUILTINS):
 	$(CC) $(CFLAGS) -o $(TEST_BUILTINS) $(TEST_BUILTINS_OBJ)
 
+$(TEST_EXECUTOR):
+	$(CC) $(CFLAGS) -o $(TEST_EXECUTOR) $(TEST_EXECUTOR_OBJ)
+
 test_parser_only: $(TEST_PARSER)
 	./$(TEST_PARSER)
 
@@ -42,12 +48,15 @@ test_helpers_only: $(TEST_TARGET)
 test_builtins_only: $(TEST_BUILTINS)
 	./$(TEST_BUILTINS)
 
+test_executor_only: $(TEST_EXECUTOR)
+	./$(TEST_EXECUTOR)
+
 clean:
 	rm -f *.o
 	
 fclean: clean
-	rm -f $(TARGET) $(TEST_TARGET) $(TEST_PARSER) $(TEST_BUILTINS)
+	rm -f $(TARGET) $(TEST_TARGET) $(TEST_PARSER) $(TEST_BUILTINS) $(TEST_EXECUTOR)
 	
 re: fclean all
 
-.PHONY: all test test_parser_only test_helpers_only clean fclean re
+.PHONY: all test test_parser_only test_helpers_only test_executor_only clean fclean re
