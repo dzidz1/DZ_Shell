@@ -1,5 +1,6 @@
 #include "builtins.h"
 #include "common.h"
+#include "executor.h"
 #include "my_helpers.h"
 #include "parser.h"
 
@@ -24,10 +25,11 @@ int shell_builts(char **args, char **env, char *initial_directory) {
     return command_env(env);
   } else if (my_strcmp(args[0], "which") == 0) {
     return command_which(args, env);
-  } else if (my_strcmp(args[0], "exit") == 0) {
+  } else if (my_strcmp(args[0], "exit") == 0 ||
+             my_strcmp(args[0], "quit") == 0) {
     exit(EXIT_SUCCESS);
   } else {
-    // command doesnt exist
+    return executor(args, env);
   }
 
   return 0;
