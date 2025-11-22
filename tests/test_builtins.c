@@ -257,7 +257,7 @@ int test_command_which(char **env) {
   return (passed == total) ? 1 : 0;
 }
 
-int test_command_cd(void) {
+int test_command_cd(char **env) {
   int total = 0, passed = 0;
   char *original_cwd = getcwd(NULL, 0);
   if (!original_cwd) {
@@ -269,7 +269,7 @@ int test_command_cd(void) {
   total++;
   {
     char *args[] = {"cd", "/", NULL};
-    command_cd(args, NULL);
+    command_cd(args, original_cwd, env);
     char *cwd = getcwd(NULL, 0);
     if (cwd && my_strcmp(cwd, "/") == 0) {
       printf("Test 1 passed: cd /\n");
@@ -285,7 +285,7 @@ int test_command_cd(void) {
   {
     char *before = getcwd(NULL, 0);
     char *args[] = {"cd", "/definitely/not/here_12345", NULL};
-    command_cd(args, NULL);
+    command_cd(args, original_cwd, env);
     char *after = getcwd(NULL, 0);
 
     if (before && after && my_strcmp(before, after) == 0) {
@@ -298,6 +298,60 @@ int test_command_cd(void) {
     }
     free(before);
     free(after);
+  }
+
+  // Test 3: cd ~ (home directory)
+  total++;
+  {
+    char *args[] = {"cd", "~", NULL};
+    command_cd(args, original_cwd, env);
+    char *cwd = getcwd(NULL, 0);
+    char *home = my_getenv("HOME", env);
+
+    if (cwd && home && my_strcmp(cwd, home) == 0) {
+      printf("Test 3 passed: cd ~\n");
+      passed++;
+    } else {
+      printf("Test 3 FAILED: cd ~, cwd = '%s', HOME = '%s'\n",
+             cwd ? cwd : "(null)", home ? home : "(null)");
+    }
+    free(cwd);
+  }
+
+  // Test 4: cd with no arguments (should go to HOME)
+  total++;
+  {
+    char *args[] = {"cd", NULL, NULL};
+    command_cd(args, original_cwd, env);
+    char *cwd = getcwd(NULL, 0);
+    char *home = my_getenv("HOME", env);
+
+    if (cwd && home && my_strcmp(cwd, home) == 0) {
+      printf("Test 4 passed: cd (no args)\n");
+      passed++;
+    } else {
+      printf("Test 4 FAILED: cd (no args), cwd = '%s', HOME = '%s'\n",
+             cwd ? cwd : "(null)", home ? home : "(null)");
+    }
+    free(cwd);
+  }
+
+  // Test 5: cd - (back to initial directory)
+  total++;
+  {
+    chdir("/tmp");
+    char *args[] = {"cd", "-", NULL};
+    command_cd(args, original_cwd, env);
+    char *cwd = getcwd(NULL, 0);
+
+    if (cwd && my_strcmp(cwd, original_cwd) == 0) {
+      printf("Test 5 passed: cd -\n");
+      passed++;
+    } else {
+      printf("Test 5 FAILED: cd -, cwd = '%s', expected = '%s'\n",
+             cwd ? cwd : "(null)", original_cwd);
+    }
+    free(cwd);
   }
 
   chdir(original_cwd);
@@ -484,7 +538,7 @@ int main(int argc, char **argv, char **env) {
   printf("\n=========================\n");
 
   total++;
-  passed += test_command_cd();
+  passed += test_command_cd(env);
   printf("\n=========================\n");
 
   total++;
