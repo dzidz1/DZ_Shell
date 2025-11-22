@@ -39,9 +39,15 @@ Executes programs from PATH, absolute paths (`/bin/ls`), or relative paths (`./p
 ## Development
 
 ```bash
-make test                   # Run all tests
-make test_builtins_only    # Test built-ins
-make clean                  # Clean build
+make                      # Build dz_shell
+make test                 # Build and run all tests
+make test_builtins_only   # Build and run only built-ins tests
+make test_helpers_only    # Build and run helper tests
+make test_parser_only     # Build and run parser tests
+make test_executor_only   # Build and run executor tests
+make clean                # Remove object files
+make fclean               # Remove object files and all binaries
+make re                   # Rebuild from scratch
 ```
 
 ## License
