@@ -1,8 +1,8 @@
-# DZ Shell
+# DZ_shell
 
 **A lightweight Unix shell implementation in C**
 
-DZ Shell is a functional Unix shell built from scratch, demonstrating core concepts like process management (fork/exec), PATH resolution, and environment variable handling.
+DZ_shell is a functional Unix shell built from scratch, demonstrating core concepts like process management (fork/exec), PATH resolution, and environment variable handling.
 
 ## Demo
 
