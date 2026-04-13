@@ -5,8 +5,7 @@
 DZ_Shell is a functional Unix shell built from scratch, demonstrating core concepts like process management (fork/exec), PATH resolution, and environment variable handling.
 
 ## Demo
-
-🎥 **[Watch the demo]https://www.youtube.com/watch?v=idEPh_Yheh0**
+https://www.youtube.com/watch?v=idEPh_Yheh0**
 
 ## Installation
 
